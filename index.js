@@ -1,40 +1,66 @@
 addListeners();
 
 function addListeners() {
+    const animation = animaster();
+
     document.getElementById('fadeInPlay')
         .addEventListener('click', function () {
             const block = document.getElementById('fadeInBlock');
-            animaster().fadeIn(block, 5000);
+            animation.fadeIn(block, 5000);
+        });
+
+    document.getElementById('fadeInCancel')
+        .addEventListener('click', function () {
+            const block = document.getElementById('fadeInBlock');
+            animation.resetFadeIn(block);
         });
 
     document.getElementById('fadeOutPlay')
         .addEventListener('click', function () {
             const block = document.getElementById('fadeOutBlock');
-            animaster().fadeOut(block, 5000);
+            animation.fadeOut(block, 5000);
+        });
+
+    document.getElementById('fadeOutCancel')
+        .addEventListener('click', function () {
+            const block = document.getElementById('fadeOutBlock');
+            animation.resetFadeOut(block);
         });
 
     document.getElementById('movePlay')
         .addEventListener('click', function () {
             const block = document.getElementById('moveBlock');
-            animaster().move(block, 1000, { x: 100, y: 10 });
+            animation.move(block, 1000, { x: 100, y: 10 });
+        });
+
+    document.getElementById('moveCancel')
+        .addEventListener('click', function () {
+            const block = document.getElementById('moveBlock');
+            animation.resetMoveAndScale(block);
         });
 
     document.getElementById('scalePlay')
         .addEventListener('click', function () {
             const block = document.getElementById('scaleBlock');
-            animaster().scale(block, 1000, 1.25);
+            animation.scale(block, 1000, 1.25);
+        });
+
+    document.getElementById('scaleCancel')
+        .addEventListener('click', function () {
+            const block = document.getElementById('scaleBlock');
+            animation.resetMoveAndScale(block);
         });
 
     document.getElementById('moveAndHidePlay')
         .addEventListener('click', function () {
             const block = document.getElementById('moveAndHideBlock');
-            animaster().moveAndHide(block, 5000);
+            animation.moveAndHide(block, 5000);
         });
 
     document.getElementById('showAndHidePlay')
         .addEventListener('click', function () {
             const block = document.getElementById('showAndHideBlock');
-            animaster().showAndHide(block, 3000);
+            animation.showAndHide(block, 3000);
         });
 
     let heartBeatingAnimation;
@@ -42,7 +68,7 @@ function addListeners() {
         .addEventListener('click', function () {
             const block = document.getElementById('heartBeatingBlock');
             if (!heartBeatingAnimation) {
-                heartBeatingAnimation = animaster().heartBeating(block);
+                heartBeatingAnimation = animation.heartBeating(block);
             }
         });
 
@@ -67,6 +93,23 @@ function getTransform(translation, ratio) {
 }
 
 function animaster() {
+    function resetFadeIn(element) {
+        element.classList.remove('show');
+        element.classList.add('hide');
+        element.style.transitionDuration = null;
+    }
+
+    function resetFadeOut(element) {
+        element.classList.remove('hide');
+        element.classList.add('show');
+        element.style.transitionDuration = null;
+    }
+
+    function resetMoveAndScale(element) {
+        element.style.transform = null;
+        element.style.transitionDuration = null;
+    }
+
     return {
         fadeIn(element, duration) {
             element.style.transitionDuration = `${duration}ms`;
@@ -126,6 +169,10 @@ function animaster() {
                     clearInterval(intervalId);
                 },
             };
-        }
+        },
+
+        resetFadeIn,
+        resetFadeOut,
+        resetMoveAndScale
     };
 }
